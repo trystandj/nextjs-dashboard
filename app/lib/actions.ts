@@ -1,13 +1,11 @@
 'use server';
 
- 
-import { signIn } from '@/auth';
-import { AuthError } from 'next-auth';
 import { z } from 'zod';
 import postgres from 'postgres';
 import { revalidatePath } from 'next/cache';
-
-
+import { redirect } from 'next/navigation';
+import { signIn } from '@/auth';
+import { AuthError } from 'next-auth';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -73,7 +71,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
 
   // Revalidate the cache for the invoices page and redirect the user.
   revalidatePath('/dashboard/invoices');
-  
+  redirect('/dashboard/invoices');
 }
 
 export async function updateInvoice(
@@ -108,7 +106,7 @@ export async function updateInvoice(
   }
 
   revalidatePath('/dashboard/invoices');
-  
+  redirect('/dashboard/invoices');
 }
 
 export async function deleteInvoice(id: string) {
